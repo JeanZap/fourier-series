@@ -2,28 +2,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
+
 def FFT(P):
-    n =  len(P)
+    n = len(P)
 
     if n == 1:
         return P
 
     w = np.exp((2j * np.pi) / n)
-    
+
     pEven = P[0::2]
     pOdd = P[1::2]
 
     yEven = FFT(pEven)
     yOdd = FFT(pOdd)
 
-
     y = [0] * n
     halfN = math.floor(n / 2)
+
     for k in range(halfN):
         y[k] = yEven[k] + pow(w, k) * yOdd[k]
         y[k + halfN] = yEven[k] - pow(w, k) * yOdd[k]
 
     return y
+
 
 # Parameters
 sampling_freq = 256
@@ -31,8 +33,8 @@ duration = 1.0
 frequencies = [2, 3, 5]
 
 t = np.linspace(0, duration, int(sampling_freq * duration), endpoint=False)
-
 P = np.zeros(len(t))
+
 for freq in frequencies:
     P += np.sin(2 * np.pi * freq * t)
 
